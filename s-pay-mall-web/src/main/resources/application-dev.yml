@@ -1,0 +1,86 @@
+server:
+  port: 8080
+  tomcat:
+    max-connections: 20
+    threads:
+      max: 20
+      min-spare: 10
+    accept-count: 10
+
+# 微信公众号对接
+weixin:
+  config:
+    originalid: gh_bd24440a0b2d
+    token: w6w8
+    app-id: wxaedbd76889528b67
+    app-secret: a91634812e604d9def9c2a2a216544ba
+    template_id: VpFBq07ZpQIRXPQxjB8Gceaq3AG6x3FFl-mBrViaOkE
+
+cache:
+  type: guava # 可选值：guava, redis
+
+spring:
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://127.0.0.1:3306/s-pay-mall?useUnicode=true&characterEncoding=utf8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&useSSL=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    validationQuery: SELECT 1
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    filters: stat
+
+    rabbitmq:
+      host: rabbitmq
+      port: 5672
+      username: admin
+      password: admin
+      virtual-host: /
+      order:
+        delay:
+          queue:
+            name: order.delay.queue
+          exchange:
+            name: order.delay.exchange
+          routing:
+            key: order.delay.routing.key
+        close:
+          queue:
+            name: order.close.queue
+          exchange:
+            name: order.close.exchange
+          routing:
+            key: order.close.routing.key
+
+mybatis:
+  mapper-locations: classpath:/mybatis/mapper/*.xml
+  config-location:  classpath:/mybatis/config/mybatis-config.xml
+
+redisson:
+  singleServerConfig:
+    address: "redis://127.0.0.1:6379"
+
+# 支付宝支付 - 沙箱 https://opendocs.alipay.com/common/02kkv7
+alipay:
+  enabled: true
+  app_id: 2021000148676465
+  merchant_private_key: MIIEvgIBADANBgkqhkiG9w0BAQEFA\][POIUYTREWQ ASCBKgwggSkAgEAAoIBAQDECITRLg0jjPhcTBIz9TuFJmCtORj6WoGPFyoDn59+8IHxA6dYdZNWVlRsZkK6N4tZnh1bHQsS1POT0WYMSQYhz6JUQrm2IjVFdOGRtJ0qVtT9WrO6AwrCu15J/8yJEFb4KUctCJOU9RG5Gk2pJRFr+sqjuHtnmmdEIfq9/Lda502KP/59OEVWr9orYXBEUIN5BfB2r/XENBmbIUk0GV7bKo/OsS9fre9XD3sT265Bc9Qbpr0po+Sv9PpQrXU9kXWgN6sAd3Jp4YWhsbJMr39JrTUIC8oqDkwS8llyov1Q7MCnej6oxpROIeIAHLUgjpKKVQFgjH6iMN5NQ03IEhynAgMBAAECggEBAIp8YifMWqfUvNenPezKv+OOexmkjoq+SWymtp2ctHZevc1gAWaymQWTM0zo6RbYim8jDiYB3ILPQcwZT/g51kUog8r24G9Ut0F8EqZ2a9kvQoRBAVrVL1LmPvQT65CgpG/n6UpdFrVSc9TKSjbF4wrfPyxt9W/5Wh59yr9Qus9R/38T/U++TAX7xy2dOql2v0h3Y8pvbjHqvFzNDFrluV1ae/0Wtl+l4QqRre1e8/V16Ae8Qnz1odVOeH08lJGI96bwLQXnaCzSX9t/XfXoxpLRr0ybn7FSa8lLF4osvTdWCFt4xTnYJN4dJ4xSX+VSqyQl8uzW5/Bn9HYQ5HX2dsECgYEA5yZZHJAtL2blzh/XbFF6xnkP/61BFivb3Ho4BYuKTt4ntXsLBp0V3mN41KdaFlmh1hYLtzithAn9tQon2oUOQTH9FtY7TK1YLO8cpkmALmlDWT6TWO2ptIrKq5UAiuAhy8cNx2dapTZRqh9LLd2NAZ+kh0lDAmP3E2eNVMi023cCgYEA2RuzrZu4FzqgDOZj8D/AiNFYG6mqXcHmAs6alezTB0HJX3RyEHCaS9khwYMYL0apRtAXKCwrp4esl3ojb8G3S9TdzohoxOpccatG0eyyvzwLlOjZqJR269h+BYhp+SAOhDOL4UirKgjzQSBRiF6KFZWm+4efimFIX9Nx/cf/tFECgYBjwSX18La/XT3RveYfJe7BVp+z7JZJNjZVKR2iLv1KWg9y/53bhdFZPz53L53uRVJVbQAzWy9u60zlY3Odl4x2UFd0EpJW3fxOsAaCMPgzj1P0YNAAMdjqRHeAovYv+Ng89DObGZyB7jZCH+025wUibT348IINtwx7AFZ6/38lswKBgAhoZDry7twnbw9Q1Mn3DhO+V7Uqiuh6m9e7/IyV0U5Uo+HIdqpgUflh/UarNwKNr/yIDn2FyGMChBKRrlGjpN+Q7M4Uxknp8Y6NXX6/teRmBOTNZ7B5n2lexvKb5864CRfhjyc4UzibhCAfikjHsH1JgF/5TppjThQ38hAr8KEhAoGBAM0kZ/gC65CkgY6u3ORGqn7xbr7kf38ihe2ocHnL8L0BREtnTlsuQu1wJDc7OzSkH/fMLVLx57YJKqf7sGmPmc6Tn1z9tiswXN3oekM11g7zK/ekQrdUSqi60A5wX91oMOy1tkW8OXIZ9B3s5g9Wr7acXZfggW+lkF2fRESiI4ir
+  alipay_public_key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmioIT9+qSik+VnnEcMd8YpLq7pLT1+F7+LyASY05oQ/5Wn88QeatXneL7GzBILoUv8rSEzRh4ZbDOFbv5qNsDhvqZLsp1T2grg5hmEodXBKbF7RJ7EiqVOyiCllXbuQH2CSIgCGTmDIIhdK4iHpOXjXxzTO30Wo9f0uhHzSOq8Tj16xgifCQaq6/YuZ0WAYsnExo2/dhmo5MukFXMCbdachgst/E7hErv4tg/jqa+GCDU0PhdU0jpsq8FgpY+Ni34BoqM+LH5W6o1drsAoawjD++f4wI5cN2QQaW42rdb0OIJC3cXeqCTqxM0blwnAduCrip4nDrjQk24g76M8dUEwIDAQAB
+  notify_url: http://zy-studio.natapp1.cc/api/v1/alipay/alipay_notify_url
+  return_url: https://gaga.plus
+  gatewayUrl: https://openapi-sandbox.dl.alipaydev.com/gateway.do
+
+# 日志
+logging:
+  level:
+    root: info
+  config: classpath:logback-spring.xml
+
